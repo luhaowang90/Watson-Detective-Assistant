@@ -25,6 +25,14 @@ body {
     border-bottom: 1px solid;
 }
 
+.chatbot h1 {
+    color: white;
+}
+
+.chatbot h3 {
+    color: white;
+}
+
 .upload-section {
     display: none; /* Initially hidden */
     align-items: center;
@@ -118,6 +126,7 @@ body {
 }
 
 #responseContainer {
+    background-color: white;
     display: flex;
     height: 60%;
     margin: 20px 20px 20px 20px;
