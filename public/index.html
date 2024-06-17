@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,44 +9,39 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
 </head>
 <body>
-    <div class="chatbot">
-        <header>
-            <h1>Watson</h1>
-            <h3>Your detective assistant</h3>
-        </header>
-
+    <div class="sidebar">
+        <h1>WATSON</h1>
+        <h3>Your Detective Assistant</h3>
+        <button id="startSessionBtn">Start New Chat Session</button>
+        <button id="endSessionBtn">End Session</button>
+    </div>
+    
+    <div class="main">
         <div id="responseContainer" class="response"></div>
 
-        <div id="sessionControl">
-            <button id="startNewSession">Start New Session</button>
-            <button id="endSession">End Session</button>
+        <div id="uploadSection" class="upload-section" style="display: none;">
+            <label for="fileInput" class="file-label">
+                <span class="material-symbols-outlined">description</span>
+                <input type="file" id="uploadFilesInput" class="file-input" />
+                <span id="fileName" class="file-name">No file chosen</span>
+            </label>
+
+            <button id="removeFileBtn" class="remove-file-btn" style="display: none;">
+                <span class="material-symbols-outlined">cancel</span>
+            </button>
         </div>
-        
-        <div class="message-input-container">
-            <div id="uploadSection" class="upload-section" style="display: none;">
 
-                <label for="fileInput" class="file-label">
-                    <span class="material-symbols-outlined">description</span>
-                    <input type="file" id="uploadFilesInput" class="file-input" />
-                    <span id="fileName" class="file-name">No file chosen</span>
-                </label>
-    
-                <button id="removeFileBtn" class="remove-file-btn" style="display: none;">
-                    <span class="material-symbols-outlined">cancel</span>
-                </button>
-            </div>
+        <div id="interaction" class="user-input-section">
+            <button id="uploadFilesBtn" class="upload-button">
+                <span for="file-input" class="material-symbols-outlined">upload_file</span>
+            </button>
 
-            <div class="user-input-section">
-                <button id="uploadFilesBtn" class="upload-button">
-                    <span for="file-input" class="material-symbols-outlined">upload_file</span>
-                </button>
-    
-                <textarea id="userInput" placeholder="Type your message here" required></textarea>
-    
-                <span class="material-symbols-outlined btn-send" id="sendMessageBtn">Send</span>
-            </div>
+            <textarea id="userInput" placeholder="Type your message here" required></textarea>
+
+            <span class="material-symbols-outlined btn-send" id="sendMessageBtn">Send</span>
         </div>
     </div>
+
     <script src="js/script.js"></script>
 </body>
 </html>

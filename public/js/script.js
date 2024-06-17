@@ -8,6 +8,7 @@ window.addEventListener('beforeunload', function() {
     return confirmationMessage; // Some browsers also require this return statement
 });
 
+//Modify endSession call to first check if vectorstore.id exist before exceuting
 window.addEventListener('unload', function() {
     endSession()
 });
@@ -15,6 +16,7 @@ window.addEventListener('unload', function() {
 const sendChat = document.getElementById('sendMessageBtn');
 const uploadBtn = document.getElementById('uploadFilesBtn');
 const textArea = document.getElementById('userInput');
+const endSessionBtn = document.getElementById('endSessionBtn');
 
 const chatResponse = document.getElementById('responseContainer')
 
@@ -129,6 +131,9 @@ async function uploadFiles() {
     document.getElementById('removeFileBtn').style.display = 'none'; // Hide the remove button
     document.getElementById('uploadSection').style.display = 'none'; // Hide the uploadSection
 }
+
+//Listen to end session button
+endSessionBtn.addEventListener('click', endSession);
 
 //Delete created vector and related files upon closing the window.
 async function endSession() {

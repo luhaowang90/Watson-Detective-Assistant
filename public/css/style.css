@@ -1,35 +1,88 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #333;
+    color: #fff;
     display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
     margin: 0;
 }
 
-.chatbot {
-    position: fixed;
-    width: 95vw;
-    height: 95vh;
-    background: #444;
-    box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1),
-                0 32px 64px -48px rgba(0, 0, 0, 0.5);
-    border-radius: 20px;
+.sidebar {
+    background-color: #000;
+    padding: 20px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.chatbot header {
-    position: relative;
-    text-align: center;
-    color: #8a8a8a;
-    border-bottom: 1px solid;
+.sidebar h1, .sidebar h3 {
+    margin: 10px 0;
 }
 
-.chatbot h1 {
+.sidebar button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #444;
+}
+
+#responseContainer {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.response {
+    background-color: #555;
+    border: 1px solid #666;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.user-input-section {
+    width: 100%;
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.user-input-section textarea {
+    height: 40px;
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+}
+
+.user-input-section span {
+    align-items: center;
+    display: flex;
+}
+
+.btn-send {
+    background-color: transparent;
+    cursor: pointer;
     color: white;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
-.chatbot h3 {
+.upload-button {
+    background-color: transparent;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
     color: white;
 }
 
@@ -70,92 +123,22 @@ body {
     cursor: pointer;
     color: white;
 }
-  
-.cross-icon {
-    width: 24px;
-    height: 24px;
-    fill: #f15b5b;
-}
 
-.chatbot .message-input-container {
-    position: absolute;
-    bottom: 0;
-    width: 90vw;
-    display: flex;
-    flex-direction: column;
-    background-color: #444;
-    border-top: 1px solid #ccc;
-    margin-left: 20;
-    margin-right: 20;
-    padding: 20px 20px 20px 0px;
-}
-
-.message-input-container .user-input-section {
-    width: 100%;
-    display: flex;
+.user-input-section span {
+    color: white;
+    cursor: pointer;
 }
 
 .user-input-section textarea {
-    height: 55px;
-    width: 100%;
-    background-color: #333;
-    color: #fff;
-}
-
-.user-input-section span {
-    align-items: center;
-    display: flex;
-}
-
-.btn-send {
-    background-color: transparent;
-    cursor: pointer;
-    color: white;
-    padding-left: 20px;
-}
-
-.upload-button {
-    background-color: transparent;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    color: white;
-}
-
-#responseContainer {
-    background-color: white;
-    display: flex;
-    height: 60%;
-    margin: 20px 20px 20px 20px;
-    text-align: left;
-}
-
-.response {
-    background-color: #444;
-    color: black;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 4px;
-}
-
-.message-input-container span {
-    color: white;
-    cursor: pointer;
-}
-
-.message-input-container textarea {
     resize: none;
 }
 
-.message-input-container .btn-send {
+.user-input-section .btn-send {
     pointer-events: none;
     color: rgb(59, 59, 59);
 }
 
-.message-input-container textarea:valid ~ .btn-send  {
+.user-input-section textarea:valid ~ .btn-send  {
     pointer-events: visible;
     color: white
 }
