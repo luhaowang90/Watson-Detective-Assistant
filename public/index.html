@@ -7,6 +7,8 @@
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
+
+    <script type="module" src="https://md-block.verou.me/md-block.js"></script>
 </head>
 <body>
     <div class="sidebar">
@@ -17,11 +19,15 @@
     </div>
     
     <div class="main">
-        <div id="responseContainer" class="response"></div>
+        <div id="responseContainer" class="response">
+            <md-block id="markdown-render">
+            </md-block>
+        </div>
 
         <div id="uploadSection" class="upload-section" style="display: none;">
+            <p id="uploadStatus"></p>
             <label for="fileInput" class="file-label">
-                <span class="material-symbols-outlined">description</span>
+                <span class="material-symbols-outlined" id="fileIcon">description</span>
                 <input type="file" id="uploadFilesInput" class="file-input" />
                 <span id="fileName" class="file-name">No file chosen</span>
             </label>

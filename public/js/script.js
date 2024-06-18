@@ -18,7 +18,8 @@ const uploadBtn = document.getElementById('uploadFilesBtn');
 const textArea = document.getElementById('userInput');
 const endSessionBtn = document.getElementById('endSessionBtn');
 
-const chatResponse = document.getElementById('responseContainer')
+const chatResponse = document.getElementById('markdown-render');
+const uploadStatus = document.getElementById('uploadStatus');
 
 let fileInput
 
@@ -55,7 +56,8 @@ async function sendMessage () {
 
     try {
         if (fileInput) {
-            await uploadFiles();
+            const result = await uploadFiles();
+            uploadStatus.innerHTML = result.message;
         }
 
         if (userInput) {
@@ -70,7 +72,7 @@ async function sendMessage () {
             })
             
             const result = await response.json();
-            chatResponse.innerHTML = result.response;
+            chatResponse.innerText = result.response;
         }
         
     } catch (error) {
@@ -87,6 +89,7 @@ function displayMessage(htmlContent) {
 
 //Listen to upload button
 uploadBtn.addEventListener('click', function() {
+    uploadStatus.innerHTML = ''
     document.getElementById('uploadFilesInput').click(); // Trigger file input click
 });
 
@@ -94,6 +97,8 @@ document.getElementById('uploadFilesInput').addEventListener('change', function(
     fileInput = event.target;
     const fileName = fileInput.files.length ? fileInput.files[0].name : 'No file chosen';
     document.getElementById('fileName').textContent = fileName;
+    document.getElementById('fileIcon').style.display = 'flex'; 
+    document.getElementById('fileName').style.display = 'flex';
 
     document.getElementById('removeFileBtn').style.display = fileInput.files.length ? 'inline-block' : 'none';
     document.getElementById('uploadSection').style.display = fileInput.files.length ? 'flex' : 'none';
@@ -105,6 +110,7 @@ document.getElementById('removeFileBtn').addEventListener('click', function() {
     document.getElementById('fileName').textContent = 'No file chosen'; // Reset file name display
     document.getElementById('removeFileBtn').style.display = 'none'; // Hide the remove button
     document.getElementById('uploadSection').style.display = 'none'; // Hide the uploadSection
+    document.getElementById('fileIcon').style.display = 'none'; //Hide the fileIcon
 });
 
 async function uploadFiles() {
@@ -120,16 +126,20 @@ async function uploadFiles() {
             body: formData
         });
         const result = await response.json();
-        chatResponse.innerHTML = result.message;
+
+        fileInput.value = ''; // Clear the file input
+        document.getElementById('fileName').textContent = 'No file chosen'; // Reset file name display
+        document.getElementById('fileName').style.display = 'none'; //Hide file name
+        document.getElementById('fileIcon').style.display = 'none'; 
+    
+        document.getElementById('removeFileBtn').style.display = 'none'; // Hide the remove button
+        document.getElementById('uploadSection').style.display = 'flex'; // Hide the uploadSection
+    
+        return result;
 
     } catch(error) {
         console.error('Error upload files: ', error);
     }
-
-    fileInput.value = ''; // Clear the file input
-    document.getElementById('fileName').textContent = 'No file chosen'; // Reset file name display
-    document.getElementById('removeFileBtn').style.display = 'none'; // Hide the remove button
-    document.getElementById('uploadSection').style.display = 'none'; // Hide the uploadSection
 }
 
 //Listen to end session button
