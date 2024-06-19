@@ -1,4 +1,4 @@
-/*window.addEventListener('load', function() {
+window.addEventListener('load', function() {
     startChatSession();
 });
 
@@ -11,7 +11,7 @@ window.addEventListener('beforeunload', function() {
 //Modify endSession call to first check if vectorstore.id exist before exceuting
 window.addEventListener('unload', function() {
     endSession()
-}); */
+});
 
 const sendChat = document.getElementById('sendMessageBtn');
 const uploadBtn = document.getElementById('uploadFilesBtn');
@@ -22,13 +22,14 @@ const chatResponse = document.getElementById('responseContainer');
 const uploadStatus = document.getElementById('uploadStatus');
 
 let fileInput
+let userInput
 
 //Listen for start chart button click
 async function startChatSession () {
     try {
         const response = await fetch ('/start-chat', { method: 'POST'});
         const result = await response.json();
-        chatResponse.innerHTML = result.message;
+        chatResponse.appendChild(createChatLi(result.message, "incoming"));
     } catch (error) {
         console.error('Error starting chat session', error)
     }
@@ -46,8 +47,8 @@ textArea.addEventListener("keydown", (e) => {
     } 
 });
 
-async function sendMessage () {
-    const userInput = document.getElementById('userInput').value;
+function sendMessage() {
+    userInput = document.getElementById('userInput').value;
     document.getElementById('userInput').value = ""
 
     if (!userInput) {
@@ -56,6 +57,16 @@ async function sendMessage () {
 
     chatResponse.appendChild(createChatLi(userInput, "outgoing"))
 
+    setTimeout(() => {
+        const incomingChatli = createChatHTML("Thinking...", "incoming");
+        chatResponse.appendChild(incomingChatli);
+        generateResponse(incomingChatli);
+    }, 600)
+}
+
+async function generateResponse(incomingChatli) {
+    const messageElement = incomingChatli.querySelector('p').nextSibling;
+    
     try {
         if (fileInput) {
             const result = await uploadFiles();
@@ -74,7 +85,7 @@ async function sendMessage () {
             })
             
             const result = await response.json();
-            chatResponse.appendChild(createChatHTML(result.response, "incoming")); 
+            messageElement.innerHTML = result.response
         }
         
     } catch (error) {
