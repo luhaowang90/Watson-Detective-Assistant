@@ -1,4 +1,4 @@
-window.addEventListener('load', function() {
+/*window.addEventListener('load', function() {
     startChatSession();
 });
 
@@ -11,14 +11,14 @@ window.addEventListener('beforeunload', function() {
 //Modify endSession call to first check if vectorstore.id exist before exceuting
 window.addEventListener('unload', function() {
     endSession()
-});
+}); */
 
 const sendChat = document.getElementById('sendMessageBtn');
 const uploadBtn = document.getElementById('uploadFilesBtn');
 const textArea = document.getElementById('userInput');
 const endSessionBtn = document.getElementById('endSessionBtn');
 
-const chatResponse = document.getElementById('markdown-render');
+const chatResponse = document.getElementById('responseContainer');
 const uploadStatus = document.getElementById('uploadStatus');
 
 let fileInput
@@ -54,6 +54,8 @@ async function sendMessage () {
         return;
     }
 
+    chatResponse.appendChild(createChatLi(userInput, "outgoing"))
+
     try {
         if (fileInput) {
             const result = await uploadFiles();
@@ -72,19 +74,12 @@ async function sendMessage () {
             })
             
             const result = await response.json();
-            chatResponse.innerText = result.response;
+            chatResponse.appendChild(createChatHTML(result.response, "incoming")); 
         }
         
     } catch (error) {
         console.error('Error sending message: ', error);
     }
-}
-
-function displayMessage(htmlContent) {
-    const messageElement = document.createElement('div');
-    messageElement.className = 'response';
-    messageElement.innerHTML = htmlContent;
-    responseContainer.appendChild(messageElement);
 }
 
 //Listen to upload button
@@ -150,10 +145,33 @@ async function endSession() {
     try {
         const response = await fetch('/end-session', { method: 'POST' });
         const result = await response.json();
-        chatResponse.innerHTML = result.message;
+        chatResponse.appendChild(createChatLi(result.message, "incoming"));
 
     } catch (error) {
         console.error('Error ending sesion: ', error);
     }
 }
 
+const createChatLi = (message, className) => {
+    const chatLi = document.createElement("li");
+    chatLi.classList.add("chat", className);
+
+    let chatContent = className === "outgoing" ? '<p id="title">User</p><p></p>' : '<p id="title">Assistant</p><p class="assistant"></p>';
+
+    chatLi.innerHTML = chatContent;
+    chatLi.querySelector('p').nextSibling.textContent = message;
+
+    return chatLi
+}
+
+const createChatHTML = (message, className) => {
+    const chatLi = document.createElement("li");
+    chatLi.classList.add("chat", className);
+
+    let chatContent = className === "outgoing" ? '<p id="title">User</p><p></p>' : '<p id="title">Assistant</p><p class="assistant"></p>';
+
+    chatLi.innerHTML = chatContent;
+    chatLi.querySelector('p').nextSibling.innerHTML = message;
+
+    return chatLi
+}
