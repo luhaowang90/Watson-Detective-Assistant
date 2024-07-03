@@ -16,6 +16,7 @@ window.addEventListener('unload', function() {
 const sendChat = document.getElementById('sendMessageBtn');
 const uploadBtn = document.getElementById('uploadFilesBtn');
 const textArea = document.getElementById('userInput');
+const startSessionBtn = document.getElementById('startSessionBtn');
 const endSessionBtn = document.getElementById('endSessionBtn');
 
 const chatResponse = document.getElementById('responseContainer');
@@ -25,8 +26,13 @@ let fileInput
 let userInput
 
 //Listen for start chart button click
+startSessionBtn.addEventListener('click', startChatSession);
+
 async function startChatSession () {
     try {
+        chatResponse.innerHTML = "";
+        uploadStatus.innerHTML = "";
+        
         const response = await fetch ('/start-chat', { method: 'POST'});
         const result = await response.json();
         chatResponse.appendChild(createChatLi(result.message, "incoming"));

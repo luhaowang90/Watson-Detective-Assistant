@@ -5,12 +5,15 @@ import multer from 'multer';
 import bodyParser from 'body-parser';
 import fs from 'fs'
 import path from 'path'
+import showdown from "showdown";
 import { fileURLToPath } from 'url';
 
 dotenv.config()
 
 const app = express();
 const port = 3000;
+
+const converter = new showdown.Converter();
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -103,7 +106,7 @@ app.post('/send-message', async (req, res) => {
 
         const reply = messages.data[0]?.content[0];
         if (reply.type === 'text') {
-            const response = reply.text.value;
+            const response = converter.makeHtml(reply.text.value);
             console.log('Assistant: ', response)
             res.json( {response });
 
