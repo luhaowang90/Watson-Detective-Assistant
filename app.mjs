@@ -12,7 +12,6 @@ dotenv.config()
 const app = express();
 const port = 3000;
 
-
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/');
@@ -59,7 +58,7 @@ app.post('/start-chat', async(req, res) => {
                 model: 'gpt-4o',
             });
 
-            console.log('Assistant created as asssistant does not exist.');
+            console.log('Assistant created as assistant does not exist.');
         } else {
             for (const a of assistant_list.data) {
                 if (a.name === assistant_name) {
