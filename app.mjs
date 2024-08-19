@@ -37,7 +37,8 @@ const openai = new OpenAI({
 app.use(bodyParser.json());
 app.use(express.static('public'))
 
-let assistant, vectorStore, thread;
+let assistant, vectorStore, thread
+let file_array =[];
 
 //Endpoint to start chat sesion
 app.post('/start-chat', async(req, res) => {
@@ -120,29 +121,42 @@ app.post('/send-message', async (req, res) => {
     }
 });
 
-//Endpoint to take in user upload
-app.post('/upload-files', upload.single('file'), async (req, res) => {
+//Endpoint to take in user upload .single for single files, .array for multiple file
+app.post('/upload-files', upload.array('files', 5), async (req, res) => {
     try {
         //Method to try, get file names when uploading through multer and push the file into Assistant through the upload folder
         
         //Create File Stream
-        //const files = req.files.map(file => toFile(fs.createReadStream(file.path)));
-        const file = await openai.files.create({
-            file: fs.createReadStream(req.file.path),
-            purpose: 'assistants'
-        });
+        //const file = await openai.files.create({
+        //    file: fs.createReadStream(req.file.path),
+        //    purpose: 'assistants'
+        //});
+
+        //file_array.push(file.id) 
+
+        //Loop through upload array, upload files to openai, save file id into array
+        for (files in req.files) {
+            const uploadedFile = await openai.files.create({
+                file: fs.createReadStream(req.file.path),
+                purpose: 'assistants'
+            })
+
+            file_array.push(uploadedFile.id);
+        }
+        
+        console.log(file_array);
 
         //Upload files into created vector store
-        //await openai.beta.vectorStores.fileBatches.uploadAndPoll(vectorStore.id, { file });
-        await openai.beta.vectorStores.files.create(vectorStore.id, { 
-            file_id: file.id
-        });
+        //await openai.beta.vectorStores.files.create(vectorStore.id, { 
+        //    file_id: file.id
+        //});
 
         //Update assistant to use uploaded file
         await openai.beta.assistants.update(assistant.id, {
-            tools: [{ type: 'file_search'}],
+            //tools: [{ type: 'file_search'}],
+            tools: [{type: 'code_interpreter'}],
             tool_resources: {
-                file_search: { vector_store_ids: [vectorStore.id]}
+                code_interpreter: { file_ids: file_array}
             }
         });
 
@@ -157,6 +171,18 @@ app.post('/upload-files', upload.single('file'), async (req, res) => {
 //Endpoint to end session
 app.post('/end-session', async (req, res) => {
     try {
+        //Loop through file_array for file id to delete files.
+        for (const file of file_array) {
+            const fileDel = await openai.files.del(file);
+            console.log(fileDel);
+        }
+        //Empty file_array
+        file_array=[]
+
+
+        //const fileDel = await openai.files.del(fileid)
+        //console.log(fileDel)
+        
         //Loop through files within vector store and delete them after completion
         const vectorStoreFiles = await openai.beta.vectorStores.files.list(vectorStore.id);
         const delFiles = vectorStoreFiles.data;
