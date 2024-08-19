@@ -74,6 +74,8 @@ async function generateResponse(incomingChatli) {
     const messageElement = incomingChatli.querySelector('p').nextSibling;
     
     try {
+        console.log(fileInput);
+        
         if (fileInput) {
             const result = await uploadFiles();
             uploadStatus.innerHTML = result.message;
@@ -118,7 +120,7 @@ document.getElementById('uploadFilesInput').addEventListener('change', function(
 
 document.getElementById('removeFileBtn').addEventListener('click', function() {
     //const fileInput = document.getElementById('uploadFilesInput');
-    fileInput.value = ''; // Clear the file input
+    fileInput = null; // Clear the file input
     document.getElementById('fileName').textContent = 'No file chosen'; // Reset file name display
     document.getElementById('removeFileBtn').style.display = 'none'; // Hide the remove button
     document.getElementById('uploadSection').style.display = 'none'; // Hide the uploadSection
@@ -139,7 +141,7 @@ async function uploadFiles() {
         });
         const result = await response.json();
 
-        fileInput.value = ''; // Clear the file input
+        fileInput = null; // Clear the file input
         document.getElementById('fileName').textContent = 'No file chosen'; // Reset file name display
         document.getElementById('fileName').style.display = 'none'; //Hide file name
         document.getElementById('fileIcon').style.display = 'none'; 
