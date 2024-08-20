@@ -135,9 +135,12 @@ app.post('/upload-files', upload.array('files', 5), async (req, res) => {
         //file_array.push(file.id) 
 
         //Loop through upload array, upload files to openai, save file id into array
-        for (files in req.files) {
+        console.log(req.files)
+        
+        for (const file of req.files) {
+            console.log(file.path)
             const uploadedFile = await openai.files.create({
-                file: fs.createReadStream(req.file.path),
+                file: fs.createReadStream(file.path),
                 purpose: 'assistants'
             })
 
@@ -160,7 +163,8 @@ app.post('/upload-files', upload.array('files', 5), async (req, res) => {
             }
         });
 
-        res.json({ message: `${req.file.originalname} uploaded successfully.`});
+        res.json({message: `Files uploaded successfully.`})
+        //res.json({ message: `${req.file.originalname} uploaded successfully.`});
 
     } catch (error) {
         console.error('Error uploading files: ', error);

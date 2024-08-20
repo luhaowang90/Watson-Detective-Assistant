@@ -127,6 +127,7 @@ document.getElementById('removeFileBtn').addEventListener('click', function() {
     document.getElementById('fileIcon').style.display = 'none'; //Hide the fileIcon
 });
 
+/* Single file upload function
 async function uploadFiles() {
     const input = document.getElementById('uploadFilesInput');
     const file = input.files[0];
@@ -154,7 +155,41 @@ async function uploadFiles() {
     } catch(error) {
         console.error('Error upload files: ', error);
     }
-}
+} */
+
+    //Function to upload multiple files
+    async function uploadFiles() {
+        const input = document.getElementById('uploadFilesInput');
+        const files = input.files;
+
+        const formData = new FormData();
+
+        //Loop through the files and append them into a form
+        for (let i = 0; i < files.length; i++) {
+            formData.append('files', files[i])
+        }
+
+        try {
+            const response = await fetch('/upload-files', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+
+            fileInput = null; // Clear the file input
+            document.getElementById('fileName').textContent = 'No file chosen'; // Reset file name display
+            document.getElementById('fileName').style.display = 'none'; //Hide file name
+            document.getElementById('fileIcon').style.display = 'none'; 
+
+            document.getElementById('removeFileBtn').style.display = 'none'; // Hide the remove button
+            document.getElementById('uploadSection').style.display = 'flex'; // Hide the uploadSection
+
+            return result
+
+        } catch(error) {
+            console.error('Error uploading files: ', error);
+        }
+    }
 
 //Listen to end session button
 endSessionBtn.addEventListener('click', endSession);
